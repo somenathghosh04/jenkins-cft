@@ -9,7 +9,7 @@ Resources:
     Properties:
       ImageId: ami-03657b56516ab7912
       InstanceType: t2.micro
-      KeyName: !Ref sshkey
+      KeyName: myawskey
       SecurityGroups: [!Ref websecuritygroup]
       UserData:
         Fn::Base64: |
