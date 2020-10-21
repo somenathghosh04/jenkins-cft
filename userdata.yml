@@ -7,7 +7,7 @@ Resources:
   webserver:
     Type: AWS::EC2::Instance
     Properties:
-      ImageId: ami-03657b56516ab7912
+      ImageId: ami-027cab9a7bf0155df
       InstanceType: t2.micro
       KeyName: myawskey
       SecurityGroups: [!Ref websecuritygroup]
