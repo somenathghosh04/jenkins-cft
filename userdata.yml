@@ -1,0 +1,53 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Create a simple EC2 instance with user database
+
+Parameters:
+  sshkey:
+    Description: Existing key pair
+    Type: AWS::EC2::KeyPair::KeyName
+    ConstraintDescription: must be the name of an existing EC2 KeyPair.
+
+
+Resources:
+
+  webserver:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-03657b56516ab7912
+      InstanceType: t2.micro
+      KeyName: !Ref sshkey
+      SecurityGroups: [!Ref websecuritygroup]
+      UserData:
+        Fn::Base64: |
+           #!/bin/bash
+           sudo -i
+           yum update -y
+           yum install -y httpd php
+           service httpd start
+           chkconfig httpd on
+           groupadd www
+           usermod -a -G www ec2-user
+           chown -R root:www /var/www
+           chmod 2775 /var/www
+           find /var/www -type d -exec chmod 2775 {} +
+           find /var/www -type f -exec chmod 0664 {} +
+           echo "<?php phpinfo(); ?>" > /var/www/html/phpinfo.php
+
+  websecuritygroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable HTTP access via port 80 and SSH access via port 22
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: '80'
+        ToPort: '80'
+        CidrIp: 0.0.0.0/0
+      - IpProtocol: tcp
+        FromPort: '22'
+        ToPort: '22'
+        CidrIp: 0.0.0.0/0
+
+Outputs:
+  publicdns:
+    Value:
+      !GetAtt webserver.PublicDnsName
