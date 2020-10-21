@@ -1,11 +1,5 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: Create a simple EC2 instance with user database
-
-Parameters:
-  sshkey:
-    Description: Existing key pair
-    Type: AWS::EC2::KeyPair::KeyName
-    ConstraintDescription: must be the name of an existing EC2 KeyPair.
+Description: Create a simple EC2 instance with user data
 
 
 Resources:
