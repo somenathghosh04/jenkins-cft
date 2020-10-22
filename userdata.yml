@@ -7,6 +7,9 @@ Resources:
   webserver:
     Type: AWS::EC2::Instance
     Properties:
+      Tags:
+       - Key: Name
+         Value: PHP-HOST
       ImageId: ami-0947d2ba12ee1ff75
       InstanceType: t2.micro
       KeyName: nvirginia-keypair
